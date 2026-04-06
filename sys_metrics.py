@@ -14,7 +14,7 @@ def get_cpu_usage():
     for value in first[1:]:                                    #(1:) takes all the values after the position one with itself
         total1+=int(value)
 
-    time.sleep(4)                                                 #imported time
+    time.sleep(1)                                                 #imported time
 
     with open("/proc/stat","r") as file:
         second= file.readline().split()
@@ -34,7 +34,20 @@ def get_cpu_usage():
 
     return round(cpu_usage,2)
 
-clear_screen()
-print("CPU Usage:", get_cpu_usage(), "%")
 
+def make_bar(usage):
+    length=10
+    filled= int((usage/100)*10)
+    empty= length - filled
+    return "█" * filled + "░" * empty
+
+while True:
+    cpu= get_cpu_usage()
+    clear_screen()
+
+    print("CPU LIVE MONITOR")
+    print("=" * 30)
+    print(f"CPU   {make_bar(cpu)} {cpu}%")
+
+    time.sleep(2)
 
