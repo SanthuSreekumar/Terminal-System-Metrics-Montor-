@@ -34,6 +34,21 @@ def get_cpu_usage():
 
     return round(cpu_usage,2)
 
+def get_ram_usage():
+    mem_info={}
+    with open("/proc/meminfo", "r") as file:
+        for line in file:
+            parts=line.split(":")
+            key=parts[0]
+            value=parts[1].strip().split()[0]                           #removing the space before the number
+            mem_info[key]=int(value)
+
+    total_ram = mem_info["MemTotal"]
+    available_ram = mem_info["MemAvailable"]
+    used_ram = total_ram - available_ram
+    ram_usage = (used_ram / total_ram) * 100
+
+    return round(ram_usage,2)
 
 def make_bar(usage):
     length=10
@@ -43,11 +58,13 @@ def make_bar(usage):
 
 while True:
     cpu= get_cpu_usage()
+    ram= get_ram_usage()
     clear_screen()
 
     print("CPU LIVE MONITOR")
     print("=" * 30)
-    print(f"CPU   {make_bar(cpu)} {cpu}%")
+    print(f"CPU   {make_bar(cpu)} {cpu}% \n")
+    print(f"RAM   {make_bar(ram)} {ram}%")
 
     time.sleep(2)
 
