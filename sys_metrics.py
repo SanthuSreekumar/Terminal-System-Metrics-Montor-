@@ -48,7 +48,9 @@ def get_ram_usage():
     used_ram = total_ram - available_ram
     ram_usage = (used_ram / total_ram) * 100
 
-    return round(ram_usage,2)
+    total_ram_gb = total_ram/(1024*1024)
+    used_ram_gb = used_ram/(1024*1024)
+    return round(ram_usage,2), round(total_ram_gb,2), round(used_ram_gb,2)
 
 def make_bar(usage):
     length=10
@@ -58,13 +60,13 @@ def make_bar(usage):
 
 while True:
     cpu= get_cpu_usage()
-    ram= get_ram_usage()
+    ram, total_ram_gb, used_ram_gb= get_ram_usage()
     clear_screen()
 
-    print("CPU LIVE MONITOR")
+    print("SYSTEM METRICS MONITOR")
     print("=" * 30)
     print(f"CPU   {make_bar(cpu)} {cpu}% \n")
-    print(f"RAM   {make_bar(ram)} {ram}%")
+    print(f"RAM   {make_bar(ram)} {ram}% ({used_ram_gb} GB/{total_ram_gb} GB)")
 
     time.sleep(2)
 
