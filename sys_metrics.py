@@ -28,6 +28,9 @@ def get_cpu_usage():
     idle_diff = idle2 - idle1
     total_diff = total2-total1
 
+    if total_diff==0:                                          #Prevent division by zero
+        return 0
+
     work= total_diff - idle_diff
 
     cpu_usage = 100*(work/total_diff)
@@ -58,6 +61,14 @@ def make_bar(usage):
     empty= length - filled
     return "█" * filled + "░" * empty
 
+def get_status(usage):
+    if usage < 50:
+        return "\033[92mSAFE\033[0m"
+    elif usage < 80:
+        return "\033[93mHIGH\033[0m"
+    else:
+        return "\033[91mCRITICAL\033[0m"
+
 while True:
     cpu= get_cpu_usage()
     ram, total_ram_gb, used_ram_gb= get_ram_usage()
@@ -65,8 +76,8 @@ while True:
 
     print("SYSTEM METRICS MONITOR")
     print("=" * 30)
-    print(f"CPU   {make_bar(cpu)} {cpu}% \n")
-    print(f"RAM   {make_bar(ram)} {ram}% ({used_ram_gb} GB/{total_ram_gb} GB)")
+    print(f"CPU   {make_bar(cpu)} {cpu}% {get_status(cpu)} \n")
+    print(f"RAM   {make_bar(ram)} {ram}% ({used_ram_gb} GB/{total_ram_gb} GB) {get_status(ram)}")
 
     time.sleep(2)
 
